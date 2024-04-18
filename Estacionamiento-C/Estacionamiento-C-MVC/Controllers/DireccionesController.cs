@@ -22,7 +22,7 @@ namespace Estacionamiento_C_MVC.Controllers
         // GET: Direcciones
         public async Task<IActionResult> Index()
         {
-            var miBaseDeDatos = _context.Direccion.Include(d => d.Persona);
+            var miBaseDeDatos = _context.Direcciones.Include(d => d.Persona);
             return View(await miBaseDeDatos.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var direccion = await _context.Direccion
+            var direccion = await _context.Direcciones
                 .Include(d => d.Persona)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (direccion == null)
@@ -77,7 +77,7 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var direccion = await _context.Direccion.FindAsync(id);
+            var direccion = await _context.Direcciones.FindAsync(id);
             if (direccion == null)
             {
                 return NotFound();
@@ -130,7 +130,7 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var direccion = await _context.Direccion
+            var direccion = await _context.Direcciones
                 .Include(d => d.Persona)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (direccion == null)
@@ -146,10 +146,10 @@ namespace Estacionamiento_C_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var direccion = await _context.Direccion.FindAsync(id);
+            var direccion = await _context.Direcciones.FindAsync(id);
             if (direccion != null)
             {
-                _context.Direccion.Remove(direccion);
+                _context.Direcciones.Remove(direccion);
             }
 
             await _context.SaveChangesAsync();
@@ -158,7 +158,7 @@ namespace Estacionamiento_C_MVC.Controllers
 
         private bool DireccionExists(int id)
         {
-            return _context.Direccion.Any(e => e.Id == id);
+            return _context.Direcciones.Any(e => e.Id == id);
         }
     }
 }

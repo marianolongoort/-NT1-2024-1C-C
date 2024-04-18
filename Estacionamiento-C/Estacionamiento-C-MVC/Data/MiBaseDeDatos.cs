@@ -26,7 +26,7 @@ namespace Estacionamiento_C_MVC.Data
         public DbSet<Persona> Personas { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Empleado> Empleados { get; set; }
-        public DbSet<Estacionamiento_C_MVC.Models.Direccion> Direccion { get; set; }
+        public DbSet<Direccion> Direcciones { get; set; }
 
 
     }
