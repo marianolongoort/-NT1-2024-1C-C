@@ -1,0 +1,24 @@
+﻿@model Persona
+
+
+<h1>Personas Index</h1>
+
+<div>
+    <span class="badge bg-warning">
+        @Model.NombreCompleto
+    </span>     
+</div>
+
+<div>
+    <label asp-for="Nombre"></label>
+    <span>@Model.Nombre</span>    
+</div>
+<div>
+    <label asp-for="Apellido"></label>    
+    <span>@Model.Apellido</span>
+</div>
+<div>
+    <label asp-for="Email"></label>
+    <span>@Model.Email</span>
+</div>
+

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Estacionamiento_C_MVC.Models
 {
@@ -15,7 +16,7 @@ namespace Estacionamiento_C_MVC.Models
 
         [Required(ErrorMessage = "La propiedad {0} es requerida")]
         [EmailAddress]
-        [Display(Name = "Correo")]
+        [Display(Name = "Correo electronico")]
         public string Email { get; set; }
 
 
@@ -46,6 +47,12 @@ namespace Estacionamiento_C_MVC.Models
         //sin restricciones por ahora
         public Direccion Direccion { get; set; }
 
-
+        [NotMapped]
+        public string NombreCompleto 
+        {
+            get { 
+                return $"{Apellido}, {Nombre}";
+            }
+        }
     }
 }
