@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Estacionamiento_C_MVC.Models
 {
-    public class Persona
+    public class Persona : IdentityUser<int>
     {
         //sin restricciones por ahora
-        public int Id { get; set; }
+        //public int Id { get; set; }
 
         [Required(ErrorMessage = "La propiedad {0} es requerida")]
         [StringLength(25,MinimumLength = 5,ErrorMessage = "{0} debe ser entre {2} y {1}")]
@@ -17,11 +18,15 @@ namespace Estacionamiento_C_MVC.Models
         [Required(ErrorMessage = "La propiedad {0} es requerida")]
         [EmailAddress]
         [Display(Name = "Correo electronico")]
-        public string Email { get; set; }
+        public override string Email
+        {
+            get { return base.Email; }
+            set { base.Email = value; }
+        }
 
 
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+        //[DataType(DataType.Password)]
+        //public string Password { get; set; }
 
 
         [DataType(DataType.Date)]

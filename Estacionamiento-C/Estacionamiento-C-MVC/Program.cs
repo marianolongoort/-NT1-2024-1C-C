@@ -1,3 +1,6 @@
+using Estacionamiento_C_MVC.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Estacionamiento_C_MVC
 {
     public class Program
@@ -7,9 +10,18 @@ namespace Estacionamiento_C_MVC
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddDbContext<MiBaseDeDatos>(options => options.UseInMemoryDatabase("EstacionamientoDB"));
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+
+
+
+
+
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
