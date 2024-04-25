@@ -12,17 +12,17 @@ namespace Estacionamiento_C_MVC.Controllers
 {
     public class PersonasController : Controller
     {
-        private readonly MiBaseDeDatos _context;
+        private readonly MiBaseDeDatos _miDb;
 
         public PersonasController(MiBaseDeDatos context)
         {
-            _context = context;
+            _miDb = context;
         }
 
         // GET: Personas
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Personas.ToListAsync());
+            return View(_miDb.Personas.ToList());
         }
 
         // GET: Personas/Details/5
@@ -33,7 +33,7 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var persona = await _miDb.Personas
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (persona == null)
             {
@@ -43,50 +43,73 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(persona);
         }
 
-        // GET: Personas/Create
+
+
+
+
+        //Ofrecer el formulario de creación de personas    
         public IActionResult Create()
         {
-            return View();
+            Persona persona = new Persona() { 
+                Nombre = "Mariano",
+                Apellido = "Longo",
+                Email = "mlongo@ort.edu.ar",
+                Dni = 22333444
+            };            
+
+            return View(persona);
         }
 
-        // POST: Personas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
+
+        //Procesar la información recibida del cliente
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nombre,Email,Fecha,Hora,FechaAlta,Apellido,Dni,Id,UserName,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Persona persona)
+        //[ValidateAntiForgeryToken]
+        public IActionResult Create(Persona persona)            //[Bind("Nombre,Email,Fecha,Hora,FechaAlta,Apellido,Dni,Id,UserName,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] 
         {
             if (ModelState.IsValid)
             {
-                _context.Add(persona);
-                await _context.SaveChangesAsync();
+                _miDb.Add(persona);
+                _miDb.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(persona);
         }
 
-        // GET: Personas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+
+
+
+
+
+
+
+
+
+
+
+    //oferta de formulario
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var persona = await _context.Personas.FindAsync(id);
+            var persona = _miDb.Personas.Find(id); 
+            
+
             if (persona == null)
             {
                 return NotFound();
             }
+
             return View(persona);
         }
 
-        // POST: Personas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        //procesar la info
+       [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Nombre,Email,Fecha,Hora,FechaAlta,Apellido,Dni,Id,UserName,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Persona persona)
+        public async Task<IActionResult> Edit(int id, Persona persona)
         {
             if (id != persona.Id)
             {
@@ -97,8 +120,8 @@ namespace Estacionamiento_C_MVC.Controllers
             {
                 try
                 {
-                    _context.Update(persona);
-                    await _context.SaveChangesAsync();
+                    _miDb.Update(persona);
+                    await _miDb.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,7 +147,7 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var persona = await _miDb.Personas
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (persona == null)
             {
@@ -139,19 +162,19 @@ namespace Estacionamiento_C_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var persona = await _context.Personas.FindAsync(id);
+            var persona = await _miDb.Personas.FindAsync(id);
             if (persona != null)
             {
-                _context.Personas.Remove(persona);
+                _miDb.Personas.Remove(persona);
             }
 
-            await _context.SaveChangesAsync();
+            await _miDb.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PersonaExists(int id)
         {
-            return _context.Personas.Any(e => e.Id == id);
+            return _miDb.Personas.Any(e => e.Id == id);
         }
     }
 }

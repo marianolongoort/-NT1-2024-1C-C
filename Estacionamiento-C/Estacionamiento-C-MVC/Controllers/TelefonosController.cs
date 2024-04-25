@@ -10,28 +10,23 @@ using Estacionamiento_C_MVC.Models;
 
 namespace Estacionamiento_C_MVC.Controllers
 {
-    public class DireccionesController : Controller
+    public class TelefonosController : Controller
     {
-        private readonly MiBaseDeDatos _miDb;
+        private readonly MiBaseDeDatos _context;
 
-        public DireccionesController(MiBaseDeDatos db)
+        public TelefonosController(MiBaseDeDatos context)
         {
-            _miDb = db;
+            _context = context;
         }
 
-        
-        public IActionResult Index()
+        // GET: Telefonos
+        public async Task<IActionResult> Index()
         {
-            var direccionesEnDb = _miDb.Direcciones
-                                        .Include(direccion => direccion.Persona)
-                                        .ToList()
-                                        ;
-            
-            
-            return View( direccionesEnDb);
+            var miBaseDeDatos = _context.Telefono.Include(t => t.Cliente);
+            return View(await miBaseDeDatos.ToListAsync());
         }
 
-        // GET: Direcciones/Details/5
+        // GET: Telefonos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,42 +34,42 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var direccion = await _miDb.Direcciones
-                .Include(d => d.Persona)
+            var telefono = await _context.Telefono
+                .Include(t => t.Cliente)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (direccion == null)
+            if (telefono == null)
             {
                 return NotFound();
             }
 
-            return View(direccion);
+            return View(telefono);
         }
 
-        // GET: Direcciones/Create
+        // GET: Telefonos/Create
         public IActionResult Create()
         {
-            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "NombreCompleto");
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "NombreCompleto");
             return View();
         }
 
-        // POST: Direcciones/Create
+        // POST: Telefonos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Calle,Numero,PersonaId")] Direccion direccion)
+        public async Task<IActionResult> Create([Bind("Id,Numero,ClienteId,Tipo")] Telefono telefono)
         {
             if (ModelState.IsValid)
             {
-                _miDb.Add(direccion);
-                await _miDb.SaveChangesAsync();
+                _context.Add(telefono);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "Discriminator", direccion.PersonaId);
-            return View(direccion);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Discriminator", telefono.ClienteId);
+            return View(telefono);
         }
 
-        // GET: Direcciones/Edit/5
+        // GET: Telefonos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,23 +77,23 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var direccion = await _miDb.Direcciones.FindAsync(id);
-            if (direccion == null)
+            var telefono = await _context.Telefono.FindAsync(id);
+            if (telefono == null)
             {
                 return NotFound();
             }
-            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "Discriminator", direccion.PersonaId);
-            return View(direccion);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Discriminator", telefono.ClienteId);
+            return View(telefono);
         }
 
-        // POST: Direcciones/Edit/5
+        // POST: Telefonos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Calle,Numero,PersonaId")] Direccion direccion)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Numero,ClienteId,Tipo")] Telefono telefono)
         {
-            if (id != direccion.Id)
+            if (id != telefono.Id)
             {
                 return NotFound();
             }
@@ -107,12 +102,12 @@ namespace Estacionamiento_C_MVC.Controllers
             {
                 try
                 {
-                    _miDb.Update(direccion);
-                    await _miDb.SaveChangesAsync();
+                    _context.Update(telefono);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DireccionExists(direccion.Id))
+                    if (!TelefonoExists(telefono.Id))
                     {
                         return NotFound();
                     }
@@ -123,11 +118,11 @@ namespace Estacionamiento_C_MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "Discriminator", direccion.PersonaId);
-            return View(direccion);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Discriminator", telefono.ClienteId);
+            return View(telefono);
         }
 
-        // GET: Direcciones/Delete/5
+        // GET: Telefonos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,35 +130,35 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var direccion = await _miDb.Direcciones
-                .Include(d => d.Persona)
+            var telefono = await _context.Telefono
+                .Include(t => t.Cliente)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (direccion == null)
+            if (telefono == null)
             {
                 return NotFound();
             }
 
-            return View(direccion);
+            return View(telefono);
         }
 
-        // POST: Direcciones/Delete/5
+        // POST: Telefonos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var direccion = await _miDb.Direcciones.FindAsync(id);
-            if (direccion != null)
+            var telefono = await _context.Telefono.FindAsync(id);
+            if (telefono != null)
             {
-                _miDb.Direcciones.Remove(direccion);
+                _context.Telefono.Remove(telefono);
             }
 
-            await _miDb.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DireccionExists(int id)
+        private bool TelefonoExists(int id)
         {
-            return _miDb.Direcciones.Any(e => e.Id == id);
+            return _context.Telefono.Any(e => e.Id == id);
         }
     }
 }

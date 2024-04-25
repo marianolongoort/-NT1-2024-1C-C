@@ -1,4 +1,5 @@
 using Estacionamiento_C_MVC.Data;
+using Estacionamiento_C_MVC.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Estacionamiento_C_MVC
@@ -12,6 +13,8 @@ namespace Estacionamiento_C_MVC
             // Add services to the container.
 
             builder.Services.AddDbContext<MiBaseDeDatos>(options => options.UseInMemoryDatabase("EstacionamientoDB"));
+
+
 
             builder.Services.AddControllersWithViews();
 

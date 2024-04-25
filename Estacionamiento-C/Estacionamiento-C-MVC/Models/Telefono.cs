@@ -10,5 +10,7 @@
 
         //prop  relacional
         public int ClienteId { get; set; }
+
+        public TipoTelefono Tipo { get; set; }
     }
 }
