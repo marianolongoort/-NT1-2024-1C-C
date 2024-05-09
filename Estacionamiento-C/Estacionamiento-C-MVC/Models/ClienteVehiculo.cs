@@ -1,9 +1,12 @@
-﻿namespace Estacionamiento_C_MVC.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Estacionamiento_C_MVC.Models
 {
     public class ClienteVehiculo
     {
+        
         public int ClienteId { get; set; }
-
+       
         public int VehiculoId { get; set; }
 
         public Cliente Cliente { get; set; }

@@ -10,23 +10,22 @@ using Estacionamiento_C_MVC.Models;
 
 namespace Estacionamiento_C_MVC.Controllers
 {
-    public class TelefonosController : Controller
+    public class ClientesController : Controller
     {
         private readonly MiBaseDeDatos _context;
 
-        public TelefonosController(MiBaseDeDatos context)
+        public ClientesController(MiBaseDeDatos context)
         {
             _context = context;
         }
 
-        // GET: Telefonos
+        // GET: Clientes
         public async Task<IActionResult> Index()
         {
-            var miBaseDeDatos = _context.Telefonos.Include(t => t.Cliente);
-            return View(await miBaseDeDatos.ToListAsync());
+            return View(await _context.Clientes.ToListAsync());
         }
 
-        // GET: Telefonos/Details/5
+        // GET: Clientes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +33,54 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var telefono = await _context.Telefonos
-                .Include(t => t.Cliente)
+            var cliente = await _context.Clientes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (telefono == null)
+            if (cliente == null)
             {
                 return NotFound();
             }
 
-            return View(telefono);
+            return View(cliente);
         }
 
-        // GET: Telefonos/Create
+        // GET: Clientes/Create
         public IActionResult Create()
         {
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "NombreCompleto");
-            return View();
+            string email = "pedro@ort.edu.ar";
+            Cliente cliente = new Cliente()
+            {
+                CUIL = 20223334440,
+                Nombre = "Pedro",
+                Apellido = "Picapiedra",
+                Email = email,
+                FechaAlta = DateTime.Now,
+                Dni = 22333444,
+                AccessFailedCount= 0,
+                UserName = email
+            };
+
+
+
+            return View(cliente);
         }
 
-        // POST: Telefonos/Create
+        // POST: Clientes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Numero,ClienteId,Tipo")] Telefono telefono)
+        public async Task<IActionResult> Create([Bind("CUIL,Nombre,Email,FechaAlta,Apellido,Dni,Id,UserName,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Cliente cliente)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(telefono);
+                _context.Add(cliente);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Discriminator", telefono.ClienteId);
-            return View(telefono);
+            return View(cliente);
         }
 
-        // GET: Telefonos/Edit/5
+        // GET: Clientes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +88,22 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var telefono = await _context.Telefonos.FindAsync(id);
-            if (telefono == null)
+            var cliente = await _context.Clientes.FindAsync(id);
+            if (cliente == null)
             {
                 return NotFound();
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Discriminator", telefono.ClienteId);
-            return View(telefono);
+            return View(cliente);
         }
 
-        // POST: Telefonos/Edit/5
+        // POST: Clientes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Numero,ClienteId,Tipo")] Telefono telefono)
+        public async Task<IActionResult> Edit(int id, [Bind("CUIL,Nombre,Email,FechaAlta,Apellido,Dni,Id,UserName,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Cliente cliente)
         {
-            if (id != telefono.Id)
+            if (id != cliente.Id)
             {
                 return NotFound();
             }
@@ -102,12 +112,12 @@ namespace Estacionamiento_C_MVC.Controllers
             {
                 try
                 {
-                    _context.Update(telefono);
+                    _context.Update(cliente);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TelefonoExists(telefono.Id))
+                    if (!ClienteExists(cliente.Id))
                     {
                         return NotFound();
                     }
@@ -118,11 +128,10 @@ namespace Estacionamiento_C_MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Discriminator", telefono.ClienteId);
-            return View(telefono);
+            return View(cliente);
         }
 
-        // GET: Telefonos/Delete/5
+        // GET: Clientes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +139,34 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var telefono = await _context.Telefonos
-                .Include(t => t.Cliente)
+            var cliente = await _context.Clientes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (telefono == null)
+            if (cliente == null)
             {
                 return NotFound();
             }
 
-            return View(telefono);
+            return View(cliente);
         }
 
-        // POST: Telefonos/Delete/5
+        // POST: Clientes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var telefono = await _context.Telefonos.FindAsync(id);
-            if (telefono != null)
+            var cliente = await _context.Clientes.FindAsync(id);
+            if (cliente != null)
             {
-                _context.Telefonos.Remove(telefono);
+                _context.Clientes.Remove(cliente);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TelefonoExists(int id)
+        private bool ClienteExists(int id)
         {
-            return _context.Telefonos.Any(e => e.Id == id);
+            return _context.Clientes.Any(e => e.Id == id);
         }
     }
 }

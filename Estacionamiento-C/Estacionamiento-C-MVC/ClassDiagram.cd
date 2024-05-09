@@ -31,7 +31,7 @@
   <Class Name="Estacionamiento_C_MVC.Models.Persona">
     <Position X="6.75" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAECAAAAAAAAAAAEACAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAEAAAAAACAAAAEEACAAgABAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Persona.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -41,7 +41,7 @@
   <Class Name="Estacionamiento_C_MVC.Models.Telefono">
     <Position X="10.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAABCAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <HashCode>AAACAAAAAAAAAAAAABCAAAAAAAAAAAAAAAAAAAABAAQ=</HashCode>
       <FileName>Models\Telefono.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

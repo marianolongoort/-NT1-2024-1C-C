@@ -16,8 +16,21 @@ namespace Estacionamiento_C_MVC.Data
             base.OnModelCreating(modelBuilder);
 
             //especializar nosotros
+            //modelBuilder.Entity<Direccion>().HasKey(direccion => direccion.Id);
+
 
             //definir cosas para las relaciones muchos a muchos.
+            modelBuilder.Entity<ClienteVehiculo>().HasKey(cv => new { cv.ClienteId,cv.VehiculoId});
+
+            modelBuilder.Entity<ClienteVehiculo>().HasOne(cv => cv.Cliente)
+                                                    .WithMany(cliente => cliente.ClientesVehiculos)
+                                                        .HasForeignKey(cv => cv.ClienteId);
+
+            modelBuilder.Entity<ClienteVehiculo>().HasOne(cv => cv.Vehiculo)
+                                                    .WithMany(vehiculo => vehiculo.ClientesVehiculos)
+                                                        .HasForeignKey(cv => cv.VehiculoId);
+
+
 
         }
 
@@ -27,7 +40,9 @@ namespace Estacionamiento_C_MVC.Data
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Empleado> Empleados { get; set; }
         public DbSet<Direccion> Direcciones { get; set; }
-        public DbSet<Estacionamiento_C_MVC.Models.Telefono> Telefono { get; set; }
+        public DbSet<Telefono> Telefonos { get; set; }
+        public DbSet<ClienteVehiculo> ClientesVehiculos { get; set; }
+        public DbSet<Vehiculo> Vehiculos { get; set; }
 
 
     }

@@ -10,23 +10,22 @@ using Estacionamiento_C_MVC.Models;
 
 namespace Estacionamiento_C_MVC.Controllers
 {
-    public class TelefonosController : Controller
+    public class VehiculosController : Controller
     {
         private readonly MiBaseDeDatos _context;
 
-        public TelefonosController(MiBaseDeDatos context)
+        public VehiculosController(MiBaseDeDatos context)
         {
             _context = context;
         }
 
-        // GET: Telefonos
+        // GET: Vehiculos
         public async Task<IActionResult> Index()
         {
-            var miBaseDeDatos = _context.Telefonos.Include(t => t.Cliente);
-            return View(await miBaseDeDatos.ToListAsync());
+            return View(await _context.Vehiculos.ToListAsync());
         }
 
-        // GET: Telefonos/Details/5
+        // GET: Vehiculos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +33,39 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var telefono = await _context.Telefonos
-                .Include(t => t.Cliente)
+            var vehiculo = await _context.Vehiculos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (telefono == null)
+            if (vehiculo == null)
             {
                 return NotFound();
             }
 
-            return View(telefono);
+            return View(vehiculo);
         }
 
-        // GET: Telefonos/Create
+        // GET: Vehiculos/Create
         public IActionResult Create()
         {
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "NombreCompleto");
-            return View();
+            return View(new Vehiculo() { Patente="III222"});
         }
 
-        // POST: Telefonos/Create
+        // POST: Vehiculos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Numero,ClienteId,Tipo")] Telefono telefono)
+        public async Task<IActionResult> Create([Bind("Id,Patente")] Vehiculo vehiculo)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(telefono);
+                _context.Add(vehiculo);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Discriminator", telefono.ClienteId);
-            return View(telefono);
+            return View(vehiculo);
         }
 
-        // GET: Telefonos/Edit/5
+        // GET: Vehiculos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +73,22 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var telefono = await _context.Telefonos.FindAsync(id);
-            if (telefono == null)
+            var vehiculo = await _context.Vehiculos.FindAsync(id);
+            if (vehiculo == null)
             {
                 return NotFound();
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Discriminator", telefono.ClienteId);
-            return View(telefono);
+            return View(vehiculo);
         }
 
-        // POST: Telefonos/Edit/5
+        // POST: Vehiculos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Numero,ClienteId,Tipo")] Telefono telefono)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Patente")] Vehiculo vehiculo)
         {
-            if (id != telefono.Id)
+            if (id != vehiculo.Id)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace Estacionamiento_C_MVC.Controllers
             {
                 try
                 {
-                    _context.Update(telefono);
+                    _context.Update(vehiculo);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TelefonoExists(telefono.Id))
+                    if (!VehiculoExists(vehiculo.Id))
                     {
                         return NotFound();
                     }
@@ -118,11 +113,10 @@ namespace Estacionamiento_C_MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Discriminator", telefono.ClienteId);
-            return View(telefono);
+            return View(vehiculo);
         }
 
-        // GET: Telefonos/Delete/5
+        // GET: Vehiculos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +124,34 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var telefono = await _context.Telefonos
-                .Include(t => t.Cliente)
+            var vehiculo = await _context.Vehiculos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (telefono == null)
+            if (vehiculo == null)
             {
                 return NotFound();
             }
 
-            return View(telefono);
+            return View(vehiculo);
         }
 
-        // POST: Telefonos/Delete/5
+        // POST: Vehiculos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var telefono = await _context.Telefonos.FindAsync(id);
-            if (telefono != null)
+            var vehiculo = await _context.Vehiculos.FindAsync(id);
+            if (vehiculo != null)
             {
-                _context.Telefonos.Remove(telefono);
+                _context.Vehiculos.Remove(vehiculo);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TelefonoExists(int id)
+        private bool VehiculoExists(int id)
         {
-            return _context.Telefonos.Any(e => e.Id == id);
+            return _context.Vehiculos.Any(e => e.Id == id);
         }
     }
 }
