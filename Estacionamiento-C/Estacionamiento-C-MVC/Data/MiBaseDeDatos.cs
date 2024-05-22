@@ -1,10 +1,11 @@
 ﻿using Estacionamiento_C_MVC.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Estacionamiento_C_MVC.Data
 {
-    public class MiBaseDeDatos : IdentityDbContext
+    public class MiBaseDeDatos : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>
     {
         public MiBaseDeDatos(DbContextOptions options) : base(options)
         {
@@ -30,7 +31,8 @@ namespace Estacionamiento_C_MVC.Data
                                                     .WithMany(vehiculo => vehiculo.ClientesVehiculos)
                                                         .HasForeignKey(cv => cv.VehiculoId);
 
-
+            modelBuilder.Entity<IdentityUser<int>>().ToTable("Personas");
+            //modelBuilder.Entity<IdentityUserRole<int>>().ToTable("PersonasRoles");
 
         }
 

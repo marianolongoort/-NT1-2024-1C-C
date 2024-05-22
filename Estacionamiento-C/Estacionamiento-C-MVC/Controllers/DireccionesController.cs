@@ -70,7 +70,7 @@ namespace Estacionamiento_C_MVC.Controllers
                 await _miDb.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "Discriminator", direccion.PersonaId);
+            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "NombreCompleto", direccion.PersonaId);
             return View(direccion);
         }
 
@@ -87,7 +87,7 @@ namespace Estacionamiento_C_MVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "Discriminator", direccion.PersonaId);
+            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "NombreCompleto", direccion.PersonaId);
             return View(direccion);
         }
 
@@ -123,7 +123,7 @@ namespace Estacionamiento_C_MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "Discriminator", direccion.PersonaId);
+            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "NombreCompleto", direccion.PersonaId);
             return View(direccion);
         }
 

@@ -22,7 +22,11 @@ namespace Estacionamiento_C_MVC.Controllers
         // GET: ClientesVehiculos
         public async Task<IActionResult> Index()
         {
-            var miBaseDeDatos = _miBaseDeDatos.ClientesVehiculos.Include(c => c.Cliente).Include(c => c.Vehiculo);
+            var miBaseDeDatos = _miBaseDeDatos.ClientesVehiculos
+                                                .Include(c => c.Cliente)
+                                                .Include(c => c.Vehiculo);
+
+
             return View(await miBaseDeDatos.ToListAsync());
         }
 

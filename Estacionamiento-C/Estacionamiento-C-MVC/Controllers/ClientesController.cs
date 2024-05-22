@@ -12,17 +12,28 @@ namespace Estacionamiento_C_MVC.Controllers
 {
     public class ClientesController : Controller
     {
-        private readonly MiBaseDeDatos _context;
+        private readonly MiBaseDeDatos _miDb;
 
         public ClientesController(MiBaseDeDatos context)
         {
-            _context = context;
+            _miDb = context;
         }
 
         // GET: Clientes
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Clientes.ToListAsync());
+            var clientesEnDb = _miDb.Clientes
+                                        //.Where(clt => clt.Apellido == "Picapiedra")
+                                        .OrderBy(clt => clt.Apellido)
+                                            .ThenBy(clt => clt.Nombre)
+                                        //.ToList()
+                                        ;
+            if (true)
+            {
+                clientesEnDb.OrderBy(clt => clt.Nombre);
+            }
+
+            return View(clientesEnDb);
         }
 
         // GET: Clientes/Details/5
@@ -33,8 +44,11 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var cliente = await _miDb.Clientes
+                                        .Include(clt => clt.Direccion)                                        
+                                        .FirstOrDefaultAsync(clt => clt.Id == id);
+
+
             if (cliente == null)
             {
                 return NotFound();
@@ -73,8 +87,8 @@ namespace Estacionamiento_C_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cliente);
-                await _context.SaveChangesAsync();
+                _miDb.Add(cliente);
+                await _miDb.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(cliente);
@@ -88,7 +102,7 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes.FindAsync(id);
+            var cliente = await _miDb.Clientes.FindAsync(id);
             if (cliente == null)
             {
                 return NotFound();
@@ -112,8 +126,8 @@ namespace Estacionamiento_C_MVC.Controllers
             {
                 try
                 {
-                    _context.Update(cliente);
-                    await _context.SaveChangesAsync();
+                    _miDb.Update(cliente);
+                    await _miDb.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -139,7 +153,7 @@ namespace Estacionamiento_C_MVC.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
+            var cliente = await _miDb.Clientes
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null)
             {
@@ -154,19 +168,19 @@ namespace Estacionamiento_C_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
+            var cliente = await _miDb.Clientes.FindAsync(id);
             if (cliente != null)
             {
-                _context.Clientes.Remove(cliente);
+                _miDb.Clientes.Remove(cliente);
             }
 
-            await _context.SaveChangesAsync();
+            await _miDb.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ClienteExists(int id)
         {
-            return _context.Clientes.Any(e => e.Id == id);
+            return _miDb.Clientes.Any(e => e.Id == id);
         }
     }
 }
