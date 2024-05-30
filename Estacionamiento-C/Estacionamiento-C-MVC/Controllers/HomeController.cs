@@ -7,8 +7,9 @@ namespace Estacionamiento_C_MVC.Controllers
     public class HomeController : Controller
     {
 
-        public ActionResult Index()
+        public ActionResult Index(string mensaje)
         {
+            ViewBag.Mensaje = mensaje;
             var vista = View();
             return vista;
         }

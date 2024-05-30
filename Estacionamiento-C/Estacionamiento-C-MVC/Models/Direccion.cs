@@ -3,10 +3,10 @@
 namespace Estacionamiento_C_MVC.Models
 {
     public class Direccion
-    {        
+    {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es requeridiiiisimo")]
         [StringLength(50,MinimumLength =4)]
         public string Calle { get; set; }
 

@@ -2,6 +2,11 @@
     ViewData["Title"] = "Pagina Principal";
 }
 
+@if (ViewBag.Mensaje != null)
+{
+    <h4 class="badge bg-info">@ViewBag.Mensaje</h4>
+}
+
 <div class="text-center">
     <h1 class="display-4">Bienvenidos</h1>
     <p>Acceda a <a href="https://www.google.com">Google</a>.</p>

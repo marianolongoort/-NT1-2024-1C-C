@@ -45,7 +45,7 @@ namespace Estacionamiento_C_MVC.Data
         public DbSet<Telefono> Telefonos { get; set; }
         public DbSet<ClienteVehiculo> ClientesVehiculos { get; set; }
         public DbSet<Vehiculo> Vehiculos { get; set; }
-
+        public DbSet<Rol> MisRoles { get; set; }
 
     }
 }

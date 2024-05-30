@@ -22,27 +22,46 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Principal</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Personas" asp-action="Index">Personas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Clientes" asp-action="Index">Clientes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Empleados" asp-action="Index">Empleados</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Direcciones" asp-action="Index">Direcciones</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Telefonos" asp-action="Index">Telefonos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Vehiculos" asp-action="Index">Vehiculos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="ClientesVehiculos" asp-action="Index">Clientes Vehiculos</a>
-                        </li>
+
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Personas" asp-action="Index">Personas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Clientes" asp-action="Index">Clientes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Empleados" asp-action="Index">Empleados</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Direcciones" asp-action="Index">Direcciones</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Telefonos" asp-action="Index">Telefonos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Vehiculos" asp-action="Index">Vehiculos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="ClientesVehiculos" asp-action="Index">Clientes Vehiculos</a>
+                            </li>
+                            <li class ="nav-item">
+                                <span class="badge bg-info mt-2">@User.Identity.Name</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="CerrarSesion">Cerrar sesión</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Registrar">Registrar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="IniciarSesion">Iniciar sesión</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -59,6 +78,7 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - Estacionamiento_C_MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <a asp-action="Seed" asp-controller="PreCarga" class="btn badge bg-danger">Pre-Carga</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

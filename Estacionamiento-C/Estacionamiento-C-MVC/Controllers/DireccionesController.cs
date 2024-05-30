@@ -51,9 +51,30 @@ namespace Estacionamiento_C_MVC.Controllers
         }
 
         // GET: Direcciones/Create
-        public IActionResult Create()
+        public IActionResult Create(bool precarga = false,bool condireccion = false)
         {
-            ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "NombreCompleto");
+
+            var personas = _miDb.Personas.Include(p => p.Direccion);
+            
+            IQueryable personasEnDb;
+
+            if (condireccion)
+            {
+                personasEnDb = personas;
+            }
+            else
+            {
+                personasEnDb = personas.Where(p => p.Direccion == null);
+            }
+
+            ViewData["PersonaId"] = new SelectList(personasEnDb, "Id", "NombreCompleto");
+
+            if (precarga)
+            {
+                Direccion dir = new Direccion() { Calle = "Corrientes", Numero = 2222 };
+                return View(dir);
+            }
+            
             return View();
         }
 
@@ -64,13 +85,17 @@ namespace Estacionamiento_C_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Calle,Numero,PersonaId")] Direccion direccion)
         {
+            //ModelState.Remove("Calle");
+
             if (ModelState.IsValid)
             {
                 _miDb.Add(direccion);
                 await _miDb.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            
             ViewData["PersonaId"] = new SelectList(_miDb.Personas, "Id", "NombreCompleto", direccion.PersonaId);
+            
             return View(direccion);
         }
 
