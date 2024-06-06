@@ -1,10 +1,12 @@
 ﻿using Estacionamiento_C_MVC.Data;
 using Estacionamiento_C_MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Estacionamiento_C_MVC.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly MiBaseDeDatos _midb;
@@ -27,12 +29,14 @@ namespace Estacionamiento_C_MVC.Controllers
 
         #region Registración cliente
         //Oferta de formulario de registración
+        [AllowAnonymous]
         public IActionResult Registrar()
         {
             return View();
         }
 
         //Procesar la info de registración del cliente
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Registrar(RegistrarVM datosFormulario)
         {
@@ -68,8 +72,11 @@ namespace Estacionamiento_C_MVC.Controllers
         #endregion
 
         #region Iniciar Cerrar
-        public IActionResult IniciarSesion()
+        [AllowAnonymous]
+        public IActionResult IniciarSesion(string returnurl)
         {
+            TempData["ReturnUrl"] = returnurl;
+
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index","Clientes");
@@ -78,6 +85,7 @@ namespace Estacionamiento_C_MVC.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> IniciarSesion(LoginVM model)
         {
@@ -88,6 +96,13 @@ namespace Estacionamiento_C_MVC.Controllers
 
                 if (resultado.Succeeded)
                 {
+                    string returnUrl = TempData["ReturnUrl"] as string;
+
+                    if (returnUrl is not null)
+                    {
+                        return Redirect(returnUrl);
+                    }
+
                     return RedirectToAction("Index","Clientes");
                 }
 
@@ -106,5 +121,12 @@ namespace Estacionamiento_C_MVC.Controllers
             return RedirectToAction("IniciarSesion", "Account");
         }
         #endregion
+
+        public async Task<IActionResult> AccesoDenegado(string returnurl)
+        {
+            ViewBag.ReturnUrl = returnurl;
+
+            return View();
+        }
     }
 }

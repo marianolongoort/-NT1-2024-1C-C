@@ -7,26 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Estacionamiento_C_MVC.Data;
 using Estacionamiento_C_MVC.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Estacionamiento_C_MVC.Controllers
 {
+    [Authorize]
     public class ClientesController : Controller
     {
         private readonly MiBaseDeDatos _miDb;
+        private readonly UserManager<Persona> _userManager;
 
-        public ClientesController(MiBaseDeDatos context)
+        public ClientesController(MiBaseDeDatos context,UserManager<Persona> userManager)
         {
             _miDb = context;
+            this._userManager = userManager;
         }
 
-        // GET: Clientes
+        [Authorize(Roles = "Adminstrador,Empleado")]
         public IActionResult Index()
         {
             var clientesEnDb = _miDb.Clientes
-                                        //.Where(clt => clt.Apellido == "Picapiedra")
                                         .OrderBy(clt => clt.Apellido)
                                             .ThenBy(clt => clt.Nombre)
-                                        //.ToList()
                                         ;
             if (true)
             {
@@ -36,9 +39,15 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(clientesEnDb);
         }
 
-        // GET: Clientes/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
+            if (User.IsInRole(Misc.ClienteRolName))
+            {
+                //hace algo
+                id = Int32.Parse(_userManager.GetUserId(User));
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -57,30 +66,18 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(cliente);
         }
 
-        // GET: Clientes/Create
+        [Authorize(Roles = "Adminstrador,Empleado")]
         public IActionResult Create()
         {
-            string email = "pedro@ort.edu.ar";
-            Cliente cliente = new Cliente()
-            {
-                CUIL = 20223334440,
-                Nombre = "Pedro",
-                Apellido = "Picapiedra",
-                Email = email,
-                FechaAlta = DateTime.Now,
-                Dni = 22333444,
-                AccessFailedCount= 0,
-                UserName = email
-            };
+            
 
 
 
-            return View(cliente);
+            return View();
         }
 
-        // POST: Clientes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [Authorize(Roles = "Adminstrador,Empleado")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CUIL,Nombre,Email,FechaAlta,Apellido,Dni,Id,UserName,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Cliente cliente)
@@ -94,7 +91,7 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(cliente);
         }
 
-        // GET: Clientes/Edit/5
+        [Authorize(Roles = "Adminstrador,Empleado")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -110,9 +107,8 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(cliente);
         }
 
-        // POST: Clientes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [Authorize(Roles = "Adminstrador,Empleado")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CUIL,Nombre,Email,FechaAlta,Apellido,Dni,Id,UserName,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Cliente cliente)
@@ -145,7 +141,7 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(cliente);
         }
 
-        // GET: Clientes/Delete/5
+        [Authorize(Roles = "Adminstrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -163,7 +159,7 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(cliente);
         }
 
-        // POST: Clientes/Delete/5
+        [Authorize(Roles = "Adminstrador")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

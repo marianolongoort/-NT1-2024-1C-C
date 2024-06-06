@@ -3,6 +3,7 @@ using Estacionamiento_C_MVC.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Web;
 
 namespace Estacionamiento_C_MVC
 {
@@ -31,8 +32,8 @@ namespace Estacionamiento_C_MVC
             builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
                 opciones =>
                 {
-                    //opciones.LoginPath = "/Account/TBD";
-                    //opciones.AccessDeniedPath = "/TBD";
+                    opciones.LoginPath = "/Account/IniciarSesion";
+                    opciones.AccessDeniedPath = "/Account/AccesoDenegado";
                     opciones.Cookie.Name = "GarageApp";
                 });
 
@@ -59,6 +60,7 @@ namespace Estacionamiento_C_MVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

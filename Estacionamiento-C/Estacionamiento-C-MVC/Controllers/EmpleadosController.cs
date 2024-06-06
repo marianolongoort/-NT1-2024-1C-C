@@ -7,9 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Estacionamiento_C_MVC.Data;
 using Estacionamiento_C_MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Estacionamiento_C_MVC.Controllers
 {
+    [Authorize(Roles ="Administrador,Empleado")]
+
+    //[Authorize(Roles = "Administrador")]
+    //[Authorize(Roles = "Empleado")]
     public class EmpleadosController : Controller
     {
         private readonly MiBaseDeDatos _context;
