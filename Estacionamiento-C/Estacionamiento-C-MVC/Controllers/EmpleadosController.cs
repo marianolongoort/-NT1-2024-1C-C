@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Estacionamiento_C_MVC.Controllers
 {
-    [Authorize(Roles ="Administrador,Empleado")]
+    [Authorize(Roles = $"{Misc.AdministradorRolName},{Misc.EmpleadoRolName}")]
 
     //[Authorize(Roles = "Administrador")]
     //[Authorize(Roles = "Empleado")]

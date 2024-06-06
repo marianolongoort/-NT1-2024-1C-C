@@ -24,7 +24,7 @@ namespace Estacionamiento_C_MVC.Controllers
             this._userManager = userManager;
         }
 
-        [Authorize(Roles = "Adminstrador,Empleado")]
+        [Authorize(Roles = $"{Misc.AdministradorRolName},{Misc.EmpleadoRolName}")]
         public IActionResult Index()
         {
             var clientesEnDb = _miDb.Clientes
@@ -66,7 +66,7 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(cliente);
         }
 
-        [Authorize(Roles = "Adminstrador,Empleado")]
+        [Authorize(Roles = $"{Misc.AdministradorRolName},{Misc.EmpleadoRolName}")]
         public IActionResult Create()
         {
             
@@ -77,7 +77,7 @@ namespace Estacionamiento_C_MVC.Controllers
         }
 
 
-        [Authorize(Roles = "Adminstrador,Empleado")]
+        [Authorize(Roles = $"{Misc.AdministradorRolName},{Misc.EmpleadoRolName}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CUIL,Nombre,Email,FechaAlta,Apellido,Dni,Id,UserName,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Cliente cliente)
@@ -91,7 +91,7 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(cliente);
         }
 
-        [Authorize(Roles = "Adminstrador,Empleado")]
+        [Authorize(Roles = $"{Misc.AdministradorRolName},{Misc.EmpleadoRolName}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -108,7 +108,7 @@ namespace Estacionamiento_C_MVC.Controllers
         }
 
 
-        [Authorize(Roles = "Adminstrador,Empleado")]
+        [Authorize(Roles = $"{Misc.AdministradorRolName},{Misc.EmpleadoRolName}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CUIL,Nombre,Email,FechaAlta,Apellido,Dni,Id,UserName,NormalizedUserName,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Cliente cliente)
@@ -141,7 +141,7 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(cliente);
         }
 
-        [Authorize(Roles = "Adminstrador")]
+        [Authorize(Roles = $"{Misc.AdministradorRolName}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -159,7 +159,7 @@ namespace Estacionamiento_C_MVC.Controllers
             return View(cliente);
         }
 
-        [Authorize(Roles = "Adminstrador")]
+        [Authorize(Roles = $"{Misc.AdministradorRolName}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -1,6 +1,13 @@
-﻿@if (@ViewBag.ReturnUrl is not null)
-{
-    <h2 class="badge bg-warning">Ud. no tiene permisos para acceder a @ViewBag.ReturnUrl</h2>
-}
+﻿
+<div>
+    @if (@ViewBag.ReturnUrl is not null)
+    {
 
-<a asp-controller="Home">Home</a>
+        <h2 class="bg-warning">Ud. no tiene permisos para acceder a @ViewBag.ReturnUrl</h2>
+        <a asp-controller="Account" asp-action="CerrarSesion" class="btn btn-dark">Cerrar sesión</a>
+
+    }
+
+    <a asp-controller="Home" asp-action="Index" class="btn btn-info">Home</a>
+
+</div>

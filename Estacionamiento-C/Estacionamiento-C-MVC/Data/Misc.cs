@@ -2,11 +2,11 @@
 {
     public static class Misc
     {
-        public static string AdministradorRolName { get; set; } = "Administrador";
-        public static string ClienteRolName { get; set; } = "Cliente";
-        public static string EmpleadoRolName { get; set; } = "Empleado";
+        public const string AdministradorRolName = "Administrador";
+        public const string ClienteRolName  = "Cliente";
+        public const string EmpleadoRolName = "Empleado";
 
-        public static string DefaultPassword { get; set; } = "Password1!";
+        public static string DefaultPassword { get; } = "Password1!";
 
     }
 }
